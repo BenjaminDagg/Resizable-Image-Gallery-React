@@ -42,9 +42,10 @@ export default class App extends Component {
 
   mouseDown(e) {
     var dragbar = document.getElementById('dragbar')
+    var dragme = document.getElementById('dragme')
       
     //check if mouse is over dragbar
-      if (e.target === dragbar) {
+      if (e.target === dragbar || e.target  === dragme) {
         console.log('clicked dragbar');
         this.setState({dragClicked:true})
       }
@@ -67,7 +68,7 @@ export default class App extends Component {
 
     //prevent mouse move from selecting other DOM elements
     e.preventDefault();
-    
+
     //offset of wrapper div  (0)
     var containerOffsetLeft = wrapper.offsetLeft;
     
@@ -99,7 +100,7 @@ export default class App extends Component {
             )
           })}
         </div>
-        <div onClick={this.dragbarClick} className="dragbar" id="dragbar"></div>
+        <div onClick={this.dragbarClick} className="dragbar" id="dragbar"><span className="vertical" id="dragme" onselectstart="return false" >DRAG ME</span></div>
         <div  className="main"  id="main">
             {this.state.images.length > 0 && 
               <Route path={'/image/:id'} render={({match})  => (
