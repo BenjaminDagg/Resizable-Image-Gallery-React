@@ -23,6 +23,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+
+    //get stock images from lorem picsum
      fetch("https://picsum.photos/v2/list")
      .then(response  => response.json())
      .then(data => {
@@ -30,7 +32,7 @@ export default class App extends Component {
        this.setState({images:data})
      }) 
 
-
+     //mouse event listeners
      document.addEventListener('mousedown',this.mouseDown)
      document.addEventListener('mouseup',this.mouseUp)
      document.addEventListener('mousemove',this.mouseMove)
@@ -41,6 +43,7 @@ export default class App extends Component {
   mouseDown(e) {
     var dragbar = document.getElementById('dragbar')
       
+    //check if mouse is over dragbar
       if (e.target === dragbar) {
         console.log('clicked dragbar');
         this.setState({dragClicked:true})
@@ -61,18 +64,24 @@ export default class App extends Component {
       console.log('not clicked');
       return
     }
+
+    //prevent mouse move from selecting other DOM elements
+    e.preventDefault();
     
     //offset of wrapper div  (0)
     var containerOffsetLeft = wrapper.offsetLeft;
     
-    //find what percent of the screen x coord the mouse is over
+    //find what percent of the screen x coord the mouse is over and make th at the size of the sidebar
+    //divide mmouse x  coord by window size to get percentage
     var pointerRelativeXpos = (e.clientX - containerOffsetLeft) / window.innerWidth * 100;
     
     //min width of left column
-    var boxAminWidth = 1;
-   
-    list.style.flex = pointerRelativeXpos + 3 +  '%';
-    main.style.flex = 100 - pointerRelativeXpos + "%"
+    var boxAminWidth = 25;
+    
+    //set sidebar flex to percentage from left of screen the mouse is over
+    list.style.flex = pointerRelativeXpos  +   '%';
+    main.style.flex = 100 - pointerRelativeXpos + "%";
+    //list.style.flexGrow = 0;
   }
 
   render() {
@@ -80,7 +89,7 @@ export default class App extends Component {
       <div className="App" id="wrapper">
         <Router>
         <div className="sidebar" id="sidebar">
-          {this.state.images.map((image) => {
+        {this.state.images.map((image) => {
             return (
               <div>
                  <Link to={'/image/'  + image.id } >
